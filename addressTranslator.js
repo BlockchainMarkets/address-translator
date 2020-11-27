@@ -1,14 +1,12 @@
-import { Injectable } from '@angular/core';
-import * as bitcore from 'bitcore-lib';
-import * as bitcoreCash from 'bitcore-lib-cash';
+const bitcore = require('bitcore-lib');
+const bitcoreCash = require('bitcore-lib-cash');
 
-@Injectable()
-export class AddressTranslatorService {
+module.exports = class AddressTranslatorService {
 
   constructor() {
   }
 
-  public getAddressCoin(address: string): any {
+  getAddressCoin(address) {
     try {
       bitcore.Address(address);
       return 'btc';
@@ -22,21 +20,21 @@ export class AddressTranslatorService {
     }
   };
 
-  public translateCashAddress(addressToTranslate: string): string {
+  translateCashAddress(addressToTranslate) {
     var origAddress = bitcore.Address(addressToTranslate);
     var origObj = origAddress.toObject();
     var resultAddress = bitcoreCash.Address.fromObject(origObj).toCashAddress();
     return resultAddress;
   }
 
-  public translateCopayAddress(addressToTranslate: string): string {
+  translateCopayAddress(addressToTranslate) {
     var origAddress = bitcore.Address(addressToTranslate);
     var origObj = origAddress.toObject();
     var resultAddress = bitcoreCash.Address.fromObject(origObj);
     return resultAddress;
   }
 
-  public translateLegacyAddress(addressToTranslate: string): string {
+  translateLegacyAddress(addressToTranslate) {
     var origCoin = this.getAddressCoin(addressToTranslate);
     if (origCoin == 'btc') return addressToTranslate;
 
